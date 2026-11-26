@@ -1,92 +1,67 @@
+
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{% endblock %}</title>
-  <style>
-    body {
-        font-family: 'Open Sans', sans-serif;
-        background-color: #f7f7f7;
-        color: #333;
-        margin: 0;
-        padding: 0;
-    }
 
-    header {
-        background-color: #0096c7;
-        color: #fff;
-        text-align: center;
-    }
+  <title>{% block title %}AutoMotors | Multimarcas{% endblock %}</title>
 
-    footer {
-        background-color: #ccc;
-        color: #333;
-        padding: 20px;
-        text-align: center;
-    }
+  <link rel="stylesheet" href="{% static 'cars/css/base.css' %}">
 
-    nav {
-        background-color: #0096c7;
-        color: #fff;
-        height: 50px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-    }
-
-    nav ul li {
-        margin: 0 10px;
-    }
-
-    nav ul li a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 16px;
-        padding: 15px;
-        transition: all 0.3s ease;
-    }
-
-    nav ul li a:hover {
-        background-color: #32bbe8;
-    }
-
-    nav ul li.active a {
-        background-color: #666;
-    }
-
-    nav ul li.active a:hover {
-        background-color: #999;
-    }
-
-  </style>
+  {% block extra_css %}{% endblock %}
 </head>
+
 <body>
-  <header>
-    <nav>
-      <ul>
+
+  <header class="site-header">
+    <nav class="navbar">
+
+      <a href="{% url 'cars_list' %}" class="brand-logo">
+        AUTO<span>MOTORS</span>
+      </a>
+
+      <ul class="nav-links">
+
+        <li>
+          <a href="{% url 'cars_list' %}">Veículos</a>
+        </li>
+
         {% if user.is_authenticated %}
-          <li>Olá, {{ user.username }}!</li>
-          <li><a href="{% url 'new_car' %}">Cadastrar Carro</a></li>
-        {% endif %}
-        {%if not user.is_authenticated %}
-          <li><a href="{% url 'register' %}">Cadastre-se</a></li>
-          <li><a href="{% url 'login' %}">Login</a></li>
+
+          <li class="user-greeting">
+            Olá, {{ user.username }}!
+          </li>
+
+          {% if perms.cars.add_car %}
+            <li>
+              <a href="{% url 'new_car' %}" class="nav-button">
+                + Cadastrar veículo
+              </a>
+            </li>
+          {% endif %}
+
+          <li>
+            <a href="{% url 'logout' %}">Sair</a>
+          </li>
+
+        {% else %}
+
+          <li>
+            <a href="{% url 'login' %}">Entrar</a>
+          </li>
+
+          <li>
+            <a href="{% url 'register' %}" class="nav-button">
+              Criar conta
+            </a>
+          </li>
+
         {% endif %}
 
-
-        <li><a href="{% url 'cars_list' %}">Carros</a></li>
-
-        {% if user.is_authenticated %}
-          <li><a href="{% url 'logout' %}">Logout</a></li>
-        {% endif %}
       </ul>
     </nav>
   </header>
@@ -96,8 +71,38 @@
     {% endblock %}
   </main>
 
-  <footer>
-    <p>&copy; 2023 PycodeBR Multimarcas</p>
+  <footer class="site-footer">
+
+    <div class="footer-content">
+
+      <div>
+        <a href="{% url 'cars_list' %}" class="brand-logo">
+          AUTO<span>MOTORS</span>
+        </a>
+
+        <p class="footer-description">
+          Encontre o veículo ideal para sua próxima conquista.
+          Qualidade e praticidade em um só lugar.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="{% url 'cars_list' %}">Veículos</a>
+
+        {% if not user.is_authenticated %}
+          <a href="{% url 'login' %}">Entrar</a>
+          <a href="{% url 'register' %}">Criar conta</a>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      &copy; {% now "Y" %} AutoMotors Multimarcas.
+      Todos os direitos reservados.
+    </div>
+
   </footer>
+
 </body>
 </html>

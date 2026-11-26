@@ -1,13 +1,116 @@
+
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cadastrar veículo | AutoMotors{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'cars/css/forms.css' %}">
+{% endblock %}
 
 {% block content %}
-    <form method = "post" enctype="multipart/form-data">
-       {%csrf_token%}
-       <table>
-           {{ form.as_table }}
-       </table>
 
-         <input type="submit" value="Cadastrar" class="btn btn-primary">
 
-    </form >
+<div class="form-container">
+
+  <div class="breadcrumb">
+    <a href="{% url 'cars_list' %}">Veículos</a>
+    <span>/</span>
+    <span>Cadastrar veículo</span>
+  </div>
+
+  <div class="form-header">
+
+    <span>Gerenciamento de estoque</span>
+
+    <h1>Cadastrar novo veículo</h1>
+
+    <p>
+      Adicione um novo veículo ao catálogo da AutoMotors.
+    </p>
+
+  </div>
+
+  <form method="post"
+        enctype="multipart/form-data"
+        class="vehicle-form">
+
+    {% csrf_token %}
+
+    <h2 class="form-section-title">
+      Informações do veículo
+    </h2>
+
+    <p class="form-description">
+      Preencha os dados abaixo. Os campos com * são obrigatórios.
+    </p>
+
+    {{ form.non_field_errors }}
+
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+      {{ hidden.errors }}
+    {% endfor %}
+
+    <div class="form-grid">
+
+      {% for field in form.visible_fields %}
+
+        <div class="form-group {% if field.name == 'photo' or field.name == 'bio' %}full-width{% endif %}">
+
+          <label for="{{ field.id_for_label }}">
+
+            {{ field.label }}
+
+            {% if field.field.required %}
+              <span class="required-mark">*</span>
+            {% endif %}
+
+          </label>
+
+          {{ field }}
+
+          {{ field.errors }}
+
+          {% if field.help_text %}
+            <div class="field-help">
+              {{ field.help_text }}
+            </div>
+          {% endif %}
+
+          {% if field.name == 'photo' %}
+
+            <img id="photo-preview"
+                 class="photo-preview"
+                 alt="Prévia da fotografia"
+                 hidden>
+
+          {% endif %}
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+    <div class="form-actions">
+
+      <a href="{% url 'cars_list' %}"
+         class="form-button cancel-button">
+        Cancelar
+      </a>
+
+      <button type="submit"
+              class="form-button submit-button">
+        + Cadastrar veículo
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+<script src="{% static 'cars/js/forms.js' %}"></script>
+
 {% endblock %}

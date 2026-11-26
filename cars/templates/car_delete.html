@@ -1,64 +1,116 @@
 
+
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Excluir veículo | AutoMotors{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'cars/css/car_delete.css' %}">
+{% endblock %}
 
 {% block content %}
-  <style>
-    .buttons-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
 
-    .btn {
-      display: inline-block;
-      background-color: #0096c7;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
-      margin: 0 10px;
-    }
 
-    .btn:hover {
-      background-color: #108eb8;
-    }
+<div class="delete-container">
 
-    .btn-danger {
-      background-color: #d9534f;
-      text-decoration: none !important;
-    }
+  <div class="delete-card">
 
-    .btn-danger:hover {
-      background-color: #d2221c;
-    }
+    <div class="warning-icon">
 
-    .error-message {
-      color: #d9534f;
-      font-size: 14px;
-      margin-top: 5px;
-    }
+      <svg viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
 
-    a {
-      text-decoration: none !important;
-    }
-  </style>
-  <div class="card">
-    <div class="card-header">
-      <h1 class="card-title">Deletar Carro</h1>
+        <path d="M3 6h18"/>
+        <path d="M9 6V3h6v3"/>
+        <path d="m5 6 1 15h12l1-15"/>
+        <path d="M10 10v7M14 10v7"/>
+
+      </svg>
+
     </div>
-    <div class="card-body">
-      <p>Tem certeza que deseja deletar o carro <strong>{{ object.brand }} {{ object.model }}</strong>?</p>
-      <form method="post">
-        {% csrf_token %}
-        <div class="buttons-container">
-          <button type="submit" class="btn btn-danger">Deletar Carro</button>
-          <a href="{% url 'car_update' pk=object.pk %}" class="btn btn-secondary">Cancelar</a>
-        </div>
-      </form>
+
+    <div class="delete-heading">
+
+      <h1>Excluir veículo?</h1>
+
+      <p>
+        Você está prestes a remover este veículo
+        do catálogo da AutoMotors.
+      </p>
+
     </div>
+
+    <div class="vehicle-summary">
+
+      {% if object.photo %}
+
+        <img src="{{ object.photo.url }}"
+             alt="{{ object.brand }} {{ object.model }}">
+
+      {% endif %}
+
+      <div>
+
+        <h2>{{ object.brand }} {{ object.model }}</h2>
+
+        <p>
+          Ano {{ object.factory_year }}/{{ object.model_year }}
+        </p>
+
+        <strong>
+          R$ {{ object.value|floatformat:"2g" }}
+        </strong>
+
+      </div>
+
+    </div>
+
+    <div class="warning-message">
+
+      <strong>Atenção: ação irreversível.</strong>
+
+      Ao confirmar a exclusão, o cadastro deste veículo
+      será removido. Essa ação não poderá ser desfeita
+      pela plataforma.
+
+    </div>
+
+    <form method="post">
+
+      {% csrf_token %}
+
+      {{ form.non_field_errors }}
+
+      <div class="delete-actions">
+
+        <a href="{% url 'car_update' pk=object.pk %}"
+           class="cancel-button">
+
+          Cancelar
+
+        </a>
+
+        <button type="submit" class="confirm-button">
+
+          Confirmar exclusão
+
+        </button>
+
+      </div>
+
+    </form>
+
   </div>
+
+  <a href="{% url 'cars_list' %}" class="back-link">
+    &larr; Voltar para o catálogo
+  </a>
+
+</div>
+
 {% endblock %}

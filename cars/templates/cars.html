@@ -1,131 +1,366 @@
 
 {% extends "base.html" %}
 
+{% load static %}
+
+{% block title %}AutoMotors | Encontre seu próximo veículo{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'cars/css/cars.css' %}">
+
+{% endblock %}
+
 {% block content %}
-  <style>
-    .car-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin: 0 auto;
-      max-width: 1200px;
-      padding: 20px;
-    }
 
-    .car-card {
-      background-color: #e3e1e1;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      overflow: hidden;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
+<section class="hero">
 
-    .car-card:hover {
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        transform: translateY(-2px);
-    }
+  <div class="hero-content">
 
-    .car-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
+    <span class="hero-label">
+      AutoMotors Multimarcas
+    </span>
 
-    .car-card h3 {
-        font-size: 20px;
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
+    <h1>
+      Sua próxima conquista
+      <span>começa aqui.</span>
+    </h1>
 
-    .car-card h2 {
-      font-size: 1.5rem;
-      margin: 10px;
-    }
+    <p>
+      Explore nosso catálogo de veículos e encontre
+      o carro ideal para o seu estilo de vida.
+    </p>
 
-    .car-card p {
-      font-size: 1rem;
-      margin-bottom: 10px;
-    }
+    <a href="#catalogo" class="hero-button">
+      Explorar veículos &rarr;
+    </a>
 
-    @media (max-width: 768px) {
-      .car-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+  </div>
 
-    form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-        text-align: center;
-        padding: 20px;
-    }
+</section>
 
-    input[type="text"] {
-        padding: 10px;
-        font-size: 16px;
-        border: 2px solid #e3e1e1;
-        border-radius: 4px;
-        margin-right: 10px;
-        transition: border-bottom-color 0.3s ease-in-out;
-    }
+<div class="catalog-container" id="catalogo">
 
-    input[type="text"]:focus {
-        outline: none;
-        border-bottom-color: #e3e1e1;
-    }
+<div class="search-box">
 
-    button[type="submit"] {
-        background-color: #0096c7;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease-in-out;
-    }
+  <form method="GET"
+        action="{% url 'cars_list' %}#catalogo"
+        class="search-form">
 
-    button[type="submit"]:hover {
-        background-color: #108eb8;
-    }
+    <div class="filter-heading">
 
-    a {
-      font-size: 18px;
-      color: #333;
-      text-decoration: none;
-    }
+      <h2>Encontre seu próximo veículo</h2>
 
-    a:hover {
-      color: #0096c7;
-    }
-  </style>
+      <p>
+        Utilize os filtros para encontrar o carro ideal.
+      </p>
 
-  <form method="GET" action="{% url 'cars_list' %}">
-    <input type="text" name="search" placeholder="Buscar carro...">
-    <button type="submit">Buscar</button>
+    </div>
+
+    <!-- Pesquisa por modelo ou marca -->
+
+    <div class="filter-group filter-search">
+
+      <label for="search">Modelo ou marca</label>
+
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Ex.: Porsche, Golf GTI, Nissan..."
+        value="{{ request.GET.search|default:'' }}"
+      >
+
+    </div>
+
+    <!-- Filtro por marca -->
+
+    <div class="filter-group">
+
+      <label for="brand">Marca</label>
+
+      <select name="brand" id="brand">
+
+        <option value="">Todas as marcas</option>
+
+        {% for brand in brands %}
+
+          <option
+            value="{{ brand.pk }}"
+            {% if selected_brand == brand.pk|stringformat:"s" %}
+              selected
+            {% endif %}
+          >
+            {{ brand.name }}
+          </option>
+
+        {% endfor %}
+
+      </select>
+
+    </div>
+
+    <!-- Preço mínimo -->
+
+    <div class="filter-group">
+
+      <label for="min_price">Preço mínimo (R$)</label>
+
+      <input
+        type="number"
+        id="min_price"
+        name="min_price"
+        min="0"
+        step="0.01"
+        placeholder="Ex.: 50000"
+        value="{{ request.GET.min_price|default:'' }}"
+      >
+
+    </div>
+
+    <!-- Preço máximo -->
+
+    <div class="filter-group">
+
+      <label for="max_price">Preço máximo (R$)</label>
+
+      <input
+        type="number"
+        id="max_price"
+        name="max_price"
+        min="0"
+        step="0.01"
+        placeholder="Sem limite"
+        value="{{ request.GET.max_price|default:'' }}"
+      >
+
+    </div>
+
+    <!-- Ordenação -->
+
+    <div class="filter-group">
+
+      <label for="order">Ordenar por</label>
+
+      <select name="order" id="order">
+
+        <option value="">Ordem padrão</option>
+
+        <option value="price_asc"
+          {% if selected_order == 'price_asc' %}
+            selected
+          {% endif %}>
+          Menor preço
+        </option>
+
+        <option value="price_desc"
+          {% if selected_order == 'price_desc' %}
+            selected
+          {% endif %}>
+          Maior preço
+        </option>
+
+        <option value="year_desc"
+          {% if selected_order == 'year_desc' %}
+            selected
+          {% endif %}>
+          Mais recentes
+        </option>
+
+        <option value="year_asc"
+          {% if selected_order == 'year_asc' %}
+            selected
+          {% endif %}>
+          Mais antigos
+        </option>
+
+        <option value="model_asc"
+          {% if selected_order == 'model_asc' %}
+            selected
+          {% endif %}>
+          Modelo: A-Z
+        </option>
+
+        <option value="model_desc"
+          {% if selected_order == 'model_desc' %}
+            selected
+          {% endif %}>
+          Modelo: Z-A
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- Botões -->
+
+    <div class="filter-actions">
+
+      <a href="{% url 'cars_list' %}#catalogo"
+         class="reset-filters">
+        Limpar filtros
+      </a>
+
+      <button type="submit">
+        Buscar veículos &rarr;
+      </button>
+
+    </div>
+
   </form>
 
-  <div class="car-grid">
-    {% if cars %}
-      {% for car in cars %}
-        <a href="{% url 'car_detail' car.pk %}">
-          <div class="car-card">
-            {% if car.photo %}
-            <img src="{{ car.photo.url }}" alt="{{ car.model }} - {{ car.brand }}">
-            {%else%}
-              <p class="no-photo"> Foto não disponível </p>
-            {% endif %}
-            <h2>{{ car.brand }} {{ car.model }}</h2>
-            <p>{{ car.factory_year }} - R$ {{ car.value }}</p>
-          </div>
-        </a>
-      {% endfor %}
-    {% else %}
-      <p class="no-results">Nenhum carro encontrado.</p>
-    {% endif %}
+</div>
+
+  <div class="catalog-heading">
+
+    <div>
+
+      <span class="section-label">
+        Nosso estoque
+      </span>
+
+      <h2>Veículos disponíveis</h2>
+
+      <p>Encontre o veículo que combina com você.</p>
+
+    </div>
+
+    <span class="vehicle-count">
+      {{ paginator.count }} veículo{{ paginator.count|pluralize }}
+    </span>
+
   </div>
+
+  <div class="car-grid">
+
+    {% if cars %}
+
+      {% for car in cars %}
+
+        <article class="car-card">
+
+          <a href="{% url 'car_detail' car.pk %}"
+             class="car-image">
+
+            {% if car.photo %}
+
+              <img
+                src="{{ car.photo.url }}"
+                alt="{{ car.brand }} {{ car.model }}"
+                loading="lazy"
+              >
+
+            {% else %}
+
+              <div class="no-photo">
+                Foto não disponível
+              </div>
+
+            {% endif %}
+
+            <span class="car-year">
+              {{ car.factory_year }}
+            </span>
+
+          </a>
+
+          <div class="car-info">
+
+            <span class="car-brand">
+              {{ car.brand }}
+            </span>
+
+            <h3>{{ car.model }}</h3>
+
+            <p class="car-price">
+              R$ {{ car.value|floatformat:"2g" }}
+            </p>
+
+            <div class="card-bottom">
+
+              <a href="{% url 'car_detail' car.pk %}"
+                 class="details-button">
+
+                Ver detalhes
+                <span>&rarr;</span>
+
+              </a>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      {% endfor %}
+
+    {% else %}
+
+      <div class="no-results">
+
+        <h3>Nenhum veículo encontrado</h3>
+
+        <p>
+          Tente pesquisar por outro modelo de veículo.
+        </p>
+
+        <a href="{% url 'cars_list' %}"
+           class="clear-search">
+          Ver todos os veículos
+        </a>
+
+      </div>
+
+    {% endif %}
+
+  </div>
+
+  {% if is_paginated %}
+
+    <nav class="pagination" aria-label="Paginação">
+
+      {% if page_obj.has_previous %}
+
+        <a href="?{% querystring page=page_obj.previous_page_number as previous_query %}{{ previous_query|cut:'?' }}#catalogo">
+          &larr; Anterior
+        </a>
+
+      {% endif %}
+
+      {% for num in paginator.page_range %}
+
+        {% if page_obj.number == num %}
+
+          <span class="pagination-active">
+            {{ num }}
+          </span>
+
+        {% else %}
+
+          <a href="{% querystring page=num %}#catalogo">
+            {{ num }}
+          </a>
+
+        {% endif %}
+
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+
+        <a href="{% querystring page=page_obj.next_page_number %}#catalogo">
+          Próxima &rarr;
+        </a>
+
+      {% endif %}
+
+    </nav>
+
+    <p class="pagination-info">
+      Página {{ page_obj.number }} de {{ paginator.num_pages }}
+    </p>
+
+  {% endif %}
+
+</div>
+
 {% endblock %}
