@@ -1,0 +1,55 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Acesso restrito | AutoMotors{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'cars/css/errors.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="error-container">
+
+  <div class="error-card">
+
+    <div class="error-icon">
+
+      <svg width="40"
+           height="40"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           aria-hidden="true">
+
+        <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+        <path d="M12 8v4"/>
+        <path d="M12 16h.01"/>
+
+      </svg>
+
+    </div>
+
+    <div class="error-code">403</div>
+
+    <h1>Acesso restrito</h1>
+
+    <p>
+      Você não possui as permissões necessárias
+      para acessar esta página.
+      Retorne ao catálogo para continuar navegando.
+    </p>
+
+    <a href="{% url 'cars_list' %}" class="error-button">
+      &larr; Voltar para o catálogo
+    </a>
+
+  </div>
+
+</section>
+
+{% endblock %}

@@ -1,187 +1,16 @@
 
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>{% block title %}AutoMotors | Multimarcas{% endblock %}</title>
 
-  <style>
-    :root {
-      --primary: #dc2626;
-      --primary-hover: #b91c1c;
-      --dark: #0d0d0d;
-      --graphite: #18181b;
-      --background: #f4f4f5;
-      --white: #ffffff;
-      --text: #18181b;
-      --muted: #71717a;
-      --border: #e4e4e7;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--background);
-      color: var(--text);
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button, input, select, textarea {
-      font-family: inherit;
-    }
-
-    .site-header {
-      background: var(--dark);
-      color: var(--white);
-      border-bottom: 3px solid var(--primary);
-    }
-
-    .navbar {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 20px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 25px;
-    }
-
-    .brand-logo {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      color: var(--white);
-      white-space: nowrap;
-    }
-
-    .brand-logo span {
-      color: var(--primary);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 24px;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .nav-links a {
-      font-size: 14px;
-      font-weight: 600;
-      color: #d4d4d8;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--primary);
-    }
-
-    .nav-links .nav-button {
-      display: inline-block;
-      background: var(--primary);
-      color: var(--white);
-      padding: 11px 20px;
-      border-radius: 6px;
-    }
-
-    .nav-links .nav-button:hover {
-      background: var(--primary-hover);
-      color: var(--white);
-    }
-
-    .user-greeting {
-      font-size: 14px;
-      color: #a1a1aa;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    .site-footer {
-      background: var(--dark);
-      color: #a1a1aa;
-      padding: 45px 30px 20px;
-      margin-top: 60px;
-    }
-
-    .footer-content {
-      max-width: 1220px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 25px;
-    }
-
-    .footer-description {
-      font-size: 14px;
-      line-height: 1.7;
-      max-width: 350px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 25px;
-      flex-wrap: wrap;
-      font-size: 14px;
-    }
-
-    .footer-links a:hover {
-      color: var(--white);
-    }
-
-    .footer-bottom {
-      max-width: 1220px;
-      margin: 30px auto 0;
-      padding-top: 20px;
-      border-top: 1px solid #27272a;
-      text-align: center;
-      font-size: 13px;
-    }
-
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        padding: 20px;
-      }
-
-      .nav-links {
-        justify-content: center;
-        gap: 15px;
-      }
-
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .footer-links {
-        justify-content: center;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'cars/css/base.css' %}">
 
   {% block extra_css %}{% endblock %}
 </head>
@@ -207,11 +36,13 @@
             Olá, {{ user.username }}!
           </li>
 
-          <li>
-            <a href="{% url 'new_car' %}" class="nav-button">
-              + Cadastrar veículo
-            </a>
-          </li>
+          {% if perms.cars.add_car %}
+            <li>
+              <a href="{% url 'new_car' %}" class="nav-button">
+                + Cadastrar veículo
+              </a>
+            </li>
+          {% endif %}
 
           <li>
             <a href="{% url 'logout' %}">Sair</a>

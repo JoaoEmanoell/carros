@@ -1,7 +1,38 @@
-venv
-db.sqlite3
-media
-__pycache__/
-*.pyc
+# Ambientes virtuais
 venv/
+.venv/
+env/
+
+# Arquivos Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variáveis de ambiente
 .env
+.env.*
+!.env.example
+
+# Banco de dados local
+db.sqlite3
+db.sqlite3-journal
+
+# Arquivos Django
+media/
+staticfiles/
+
+# Testes e cobertura
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Logs
+*.log
+
+# Editores de código
+.vscode/
+.idea/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

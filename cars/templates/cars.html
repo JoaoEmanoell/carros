@@ -7,347 +7,7 @@
 
 {% block extra_css %}
 
-<style>
-.hero {
-    background:
-        linear-gradient(
-            90deg,
-            rgba(9, 9, 11, 0.98) 0%,
-            rgba(9, 9, 11, 0.85) 35%,
-            rgba(9, 9, 11, 0.30) 70%,
-            rgba(9, 9, 11, 0.10) 100%
-        ),
-        url("{% static 'cars/images/hero-banner.jpg' %}");
-
-    background-color: #09090b;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-    min-height: 480px;
-    padding: 85px 30px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
-.hero-content {
-    width: 100%;
-    max-width: 1220px;
-    margin: 0 auto;
-}
-
-  .hero-label {
-    display: inline-block;
-    color: #f87171;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-
-  .hero h1 {
-    font-size: clamp(36px, 5vw, 64px);
-    line-height: 1.1;
-    font-weight: 800;
-    letter-spacing: -2px;
-    max-width: 750px;
-    margin: 0 0 20px;
-  }
-
-  .hero h1 span {
-    color: #ef4444;
-  }
-
-  .hero p {
-    color: #a1a1aa;
-    font-size: 17px;
-    line-height: 1.7;
-    max-width: 540px;
-    margin-bottom: 30px;
-  }
-
-  .hero-button {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    padding: 15px 28px;
-    border-radius: 7px;
-    font-weight: 600;
-    transition: background 0.2s, transform 0.2s;
-  }
-
-  .hero-button:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-  }
-
-  .catalog-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 30px;
-  }
-
-  .search-box {
-    position: relative;
-    margin-top: -28px;
-    background: white;
-    padding: 22px;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-  }
-
-  .search-form {
-    display: flex;
-    gap: 12px;
-  }
-
-  .search-form input {
-    flex: 1;
-    min-width: 0;
-    padding: 15px 18px;
-    border: 1px solid var(--border);
-    background: #fafafa;
-    border-radius: 7px;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .search-form input:focus {
-    border-color: var(--primary);
-  }
-
-  .search-form button {
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 7px;
-    padding: 15px 30px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .search-form button:hover {
-    background: var(--primary-hover);
-  }
-
-  .catalog-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin: 45px 0 25px;
-  }
-
-  .section-label {
-    color: var(--primary);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .catalog-heading h2 {
-    font-size: 32px;
-    letter-spacing: -1px;
-    margin: 7px 0;
-  }
-
-  .catalog-heading p {
-    color: var(--muted);
-    font-size: 14px;
-    margin: 0;
-  }
-
-  .vehicle-count {
-    background: #e4e4e7;
-    color: #52525b;
-    padding: 9px 15px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .car-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 25px;
-  }
-
-  .car-card {
-    display: flex;
-    flex-direction: column;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-
-  .car-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.10);
-  }
-
-  .car-image {
-    position: relative;
-    height: 235px;
-    overflow: hidden;
-    background: #e4e4e7;
-  }
-
-  .car-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s;
-  }
-
-  .car-card:hover img {
-    transform: scale(1.05);
-  }
-
-  .car-year {
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    background: rgba(13, 13, 13, 0.85);
-    color: white;
-    padding: 7px 12px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  .no-photo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--muted);
-    font-size: 14px;
-  }
-
-  .car-info {
-    padding: 22px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .car-brand {
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .car-info h3 {
-    font-size: 23px;
-    margin: 6px 0 18px;
-    letter-spacing: -0.5px;
-  }
-
-  .car-price {
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--primary);
-    margin: 0 0 20px;
-  }
-
-  .card-bottom {
-    margin-top: auto;
-    padding-top: 18px;
-    border-top: 1px solid var(--border);
-  }
-
-  .details-button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--graphite);
-    color: white;
-    padding: 13px 17px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: background 0.2s;
-  }
-
-  .details-button:hover {
-    background: var(--primary);
-  }
-
-  .no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 60px 20px;
-  }
-
-  .no-results h3 {
-    font-size: 22px;
-    margin: 0 0 10px;
-  }
-
-  .no-results p {
-    color: var(--muted);
-    margin-bottom: 25px;
-  }
-
-  .clear-search {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 6px;
-  }
-
-  @media (max-width: 1000px) {
-    .car-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 600px) {
-    .hero {
-      padding: 55px 20px 65px;
-    }
-
-    .catalog-container {
-      padding: 0 15px;
-    }
-
-    .search-box {
-      padding: 15px;
-    }
-
-    .search-form {
-      flex-direction: column;
-    }
-
-    .car-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .catalog-heading h2 {
-      font-size: 26px;
-    }
-
-    .car-image {
-      height: 240px;
-    }
-  }
-</style>
+<link rel="stylesheet" href="{% static 'cars/css/cars.css' %}">
 
 {% endblock %}
 
@@ -381,27 +41,175 @@
 
 <div class="catalog-container" id="catalogo">
 
-  <div class="search-box">
+<div class="search-box">
 
-    <form method="GET"
-          action="{% url 'cars_list' %}"
-          class="search-form">
+  <form method="GET"
+        action="{% url 'cars_list' %}#catalogo"
+        class="search-form">
+
+    <div class="filter-heading">
+
+      <h2>Encontre seu próximo veículo</h2>
+
+      <p>
+        Utilize os filtros para encontrar o carro ideal.
+      </p>
+
+    </div>
+
+    <!-- Pesquisa por modelo ou marca -->
+
+    <div class="filter-group filter-search">
+
+      <label for="search">Modelo ou marca</label>
 
       <input
         type="text"
+        id="search"
         name="search"
-        placeholder="Buscar por modelo do veículo..."
+        placeholder="Ex.: Porsche, Golf GTI, Nissan..."
         value="{{ request.GET.search|default:'' }}"
-        aria-label="Buscar veículo"
       >
 
+    </div>
+
+    <!-- Filtro por marca -->
+
+    <div class="filter-group">
+
+      <label for="brand">Marca</label>
+
+      <select name="brand" id="brand">
+
+        <option value="">Todas as marcas</option>
+
+        {% for brand in brands %}
+
+          <option
+            value="{{ brand.pk }}"
+            {% if selected_brand == brand.pk|stringformat:"s" %}
+              selected
+            {% endif %}
+          >
+            {{ brand.name }}
+          </option>
+
+        {% endfor %}
+
+      </select>
+
+    </div>
+
+    <!-- Preço mínimo -->
+
+    <div class="filter-group">
+
+      <label for="min_price">Preço mínimo (R$)</label>
+
+      <input
+        type="number"
+        id="min_price"
+        name="min_price"
+        min="0"
+        step="0.01"
+        placeholder="Ex.: 50000"
+        value="{{ request.GET.min_price|default:'' }}"
+      >
+
+    </div>
+
+    <!-- Preço máximo -->
+
+    <div class="filter-group">
+
+      <label for="max_price">Preço máximo (R$)</label>
+
+      <input
+        type="number"
+        id="max_price"
+        name="max_price"
+        min="0"
+        step="0.01"
+        placeholder="Sem limite"
+        value="{{ request.GET.max_price|default:'' }}"
+      >
+
+    </div>
+
+    <!-- Ordenação -->
+
+    <div class="filter-group">
+
+      <label for="order">Ordenar por</label>
+
+      <select name="order" id="order">
+
+        <option value="">Ordem padrão</option>
+
+        <option value="price_asc"
+          {% if selected_order == 'price_asc' %}
+            selected
+          {% endif %}>
+          Menor preço
+        </option>
+
+        <option value="price_desc"
+          {% if selected_order == 'price_desc' %}
+            selected
+          {% endif %}>
+          Maior preço
+        </option>
+
+        <option value="year_desc"
+          {% if selected_order == 'year_desc' %}
+            selected
+          {% endif %}>
+          Mais recentes
+        </option>
+
+        <option value="year_asc"
+          {% if selected_order == 'year_asc' %}
+            selected
+          {% endif %}>
+          Mais antigos
+        </option>
+
+        <option value="model_asc"
+          {% if selected_order == 'model_asc' %}
+            selected
+          {% endif %}>
+          Modelo: A-Z
+        </option>
+
+        <option value="model_desc"
+          {% if selected_order == 'model_desc' %}
+            selected
+          {% endif %}>
+          Modelo: Z-A
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- Botões -->
+
+    <div class="filter-actions">
+
+      <a href="{% url 'cars_list' %}#catalogo"
+         class="reset-filters">
+        Limpar filtros
+      </a>
+
       <button type="submit">
-        Buscar veículo
+        Buscar veículos &rarr;
       </button>
 
-    </form>
+    </div>
 
-  </div>
+  </form>
+
+</div>
 
   <div class="catalog-heading">
 
@@ -418,7 +226,7 @@
     </div>
 
     <span class="vehicle-count">
-      {{ cars|length }} veículo{{ cars|length|pluralize }}
+      {{ paginator.count }} veículo{{ paginator.count|pluralize }}
     </span>
 
   </div>
@@ -506,6 +314,52 @@
     {% endif %}
 
   </div>
+
+  {% if is_paginated %}
+
+    <nav class="pagination" aria-label="Paginação">
+
+      {% if page_obj.has_previous %}
+
+        <a href="?{% querystring page=page_obj.previous_page_number as previous_query %}{{ previous_query|cut:'?' }}#catalogo">
+          &larr; Anterior
+        </a>
+
+      {% endif %}
+
+      {% for num in paginator.page_range %}
+
+        {% if page_obj.number == num %}
+
+          <span class="pagination-active">
+            {{ num }}
+          </span>
+
+        {% else %}
+
+          <a href="{% querystring page=num %}#catalogo">
+            {{ num }}
+          </a>
+
+        {% endif %}
+
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+
+        <a href="{% querystring page=page_obj.next_page_number %}#catalogo">
+          Próxima &rarr;
+        </a>
+
+      {% endif %}
+
+    </nav>
+
+    <p class="pagination-info">
+      Página {{ page_obj.number }} de {{ paginator.num_pages }}
+    </p>
+
+  {% endif %}
 
 </div>
 
