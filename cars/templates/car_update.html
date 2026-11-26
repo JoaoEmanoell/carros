@@ -1,124 +1,269 @@
 
-{% extends "base.html" %}
+{% extends 'new_car.html' %}
+
+{% block title %}Editar veículo | AutoMotors{% endblock %}
+
+{% block extra_css %}
+
+{{ block.super }}
+
+<style>
+  .current-vehicle {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: #f4f4f5;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+
+  .current-vehicle img {
+    width: 140px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .current-vehicle span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .current-vehicle h2 {
+    font-size: 21px;
+    margin: 6px 0;
+  }
+
+  .current-vehicle p {
+    color: var(--primary);
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .form-group a {
+    color: var(--primary);
+    overflow-wrap: anywhere;
+  }
+
+  .delete-button {
+    background: #fef2f2;
+    color: var(--primary);
+    border: 1px solid #fecaca;
+    margin-right: auto;
+  }
+
+  .delete-button:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  @media (max-width: 650px) {
+    .current-vehicle {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .current-vehicle img {
+      width: 100%;
+      height: 180px;
+    }
+
+    .delete-button {
+      margin-right: 0;
+    }
+  }
+</style>
+
+{% endblock %}
 
 {% block content %}
 
-  <style>
-    form {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
+<div class="form-container">
 
-    form h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+  <div class="breadcrumb">
 
-    table {
-      margin: 0 auto;
-      border-collapse: collapse;
-      width: 100%;
-      max-width: 600px;
-    }
+    <a href="{% url 'cars_list' %}">
+      Veículos
+    </a>
 
-    th, td {
-      padding: 4px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
+    <span>/</span>
 
-    th {
-      background-color: #f2f2f2;
-    }
+    <a href="{% url 'car_detail' object.pk %}">
+      {{ object.model }}
+    </a>
 
-    input[type="text"], input[type="number"], select, textarea {
-      padding: 8px;
-      font-size: 14px;
-      border: 2px solid #ddd;
-      border-radius: 4px;
-      width: 100%;
-      max-width: 300px;
-      margin-bottom: 8px;
-      transition: border-bottom-color 0.3s ease-in-out;
-    }
+    <span>/</span>
 
-    input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-      outline: none;
-      border-bottom-color: #0096c7;
-    }
+    <span>Editar</span>
 
-    .btn {
-      background-color: #0096c7;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
-    }
+  </div>
 
-    .buttons-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
+  <div class="form-header">
 
-    .btn {
-      display: inline-block;
-      background-color: #0096c7;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
-      margin: 0 10px;
-    }
+    <span>Gerenciamento de estoque</span>
 
-    .btn:hover {
-      background-color: #108eb8;
-    }
+    <h1>Editar veículo</h1>
 
-    .btn-danger {
-      background-color: #d9534f;
-      text-decoration: none !important;
-    }
+    <p>
+      Atualize as informações do veículo selecionado.
+    </p>
 
-    .btn-danger:hover {
-      background-color: #d2221c;
-    }
+  </div>
 
-    .error-message {
-      color: #d9534f;
-      font-size: 14px;
-      margin-top: 5px;
-    }
+  <form method="post"
+        enctype="multipart/form-data"
+        class="vehicle-form">
 
-    a {
-      text-decoration: none !important;
-    }
-
-  </style>
-  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <h1>Editar Carro</h1>
-    <table>
-      {{ form.as_table }}
-    </table>
-    <div>
-      <div class="buttons-container">
-        <input type="submit" value="Salvar Alterações" class="btn btn-primary">
-        <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-danger">Deletar Carro</a>
-        <a href="{% url 'cars_list' %}" class="btn btn-secondary">Cancelar</a>
+
+    <div class="current-vehicle">
+
+      {% if object.photo %}
+
+        <img src="{{ object.photo.url }}"
+             alt="{{ object.brand }} {{ object.model }}">
+
+      {% endif %}
+
+      <div>
+
+        <span>Veículo selecionado</span>
+
+        <h2>{{ object.brand }} {{ object.model }}</h2>
+
+        <p>R$ {{ object.value|floatformat:"2g" }}</p>
+
       </div>
+
     </div>
+
+    <h2 class="form-section-title">
+      Informações do veículo
+    </h2>
+
+    <p class="form-description">
+      Altere os campos desejados e salve as modificações.
+    </p>
+
+    {{ form.non_field_errors }}
+
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+      {{ hidden.errors }}
+    {% endfor %}
+
+    <div class="form-grid">
+
+      {% for field in form.visible_fields %}
+
+        <div class="form-group {% if field.name == 'photo' or field.name == 'bio' %}full-width{% endif %}">
+
+          <label for="{{ field.id_for_label }}">
+
+            {{ field.label }}
+
+            {% if field.field.required %}
+              <span class="required-mark">*</span>
+            {% endif %}
+
+          </label>
+
+          {{ field }}
+
+          {{ field.errors }}
+
+          {% if field.help_text %}
+
+            <div class="field-help">
+              {{ field.help_text }}
+            </div>
+
+          {% endif %}
+
+          {% if field.name == 'photo' %}
+
+            <img id="photo-preview"
+                 class="photo-preview"
+                 alt="Prévia da nova fotografia"
+                 hidden>
+
+          {% endif %}
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+    <div class="form-actions">
+
+      <a href="{% url 'car_delete' pk=object.pk %}"
+         class="form-button delete-button">
+
+        Excluir veículo
+
+      </a>
+
+      <a href="{% url 'car_detail' object.pk %}"
+         class="form-button cancel-button">
+
+        Cancelar
+
+      </a>
+
+      <button type="submit"
+              class="form-button submit-button">
+
+        Salvar alterações
+
+      </button>
+
+    </div>
+
   </form>
+
+</div>
+
+<script>
+  const photoInput = document.querySelector(
+    '.vehicle-form input[type="file"][name="photo"]'
+  );
+
+  const photoPreview = document.getElementById('photo-preview');
+
+  let previewUrl = null;
+
+  if (photoInput && photoPreview) {
+
+    photoInput.addEventListener('change', function () {
+
+      const file = this.files[0];
+
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        previewUrl = null;
+      }
+
+      if (file && file.type.startsWith('image/')) {
+
+        previewUrl = URL.createObjectURL(file);
+        photoPreview.src = previewUrl;
+        photoPreview.hidden = false;
+
+      } else {
+
+        photoPreview.removeAttribute('src');
+        photoPreview.hidden = true;
+
+      }
+
+    });
+
+  }
+</script>
+
 {% endblock %}

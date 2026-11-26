@@ -1,131 +1,494 @@
 
 {% extends "base.html" %}
 
-{% block content %}
-  <style>
+{% block title %}AutoMotors | Encontre seu próximo veículo{% endblock %}
+
+{% block extra_css %}
+
+<style>
+  .hero {
+    background:
+      radial-gradient(ellipse at 90% 50%, #5c1717 0%, transparent 55%),
+      linear-gradient(120deg, #09090b, #18181b);
+    color: white;
+    padding: 85px 30px;
+    overflow: hidden;
+  }
+
+  .hero-content {
+    max-width: 1220px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    display: inline-block;
+    color: #f87171;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -2px;
+    max-width: 750px;
+    margin: 0 0 20px;
+  }
+
+  .hero h1 span {
+    color: #ef4444;
+  }
+
+  .hero p {
+    color: #a1a1aa;
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 30px;
+  }
+
+  .hero-button {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 15px 28px;
+    border-radius: 7px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .hero-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .catalog-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+
+  .search-box {
+    position: relative;
+    margin-top: -28px;
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .search-form {
+    display: flex;
+    gap: 12px;
+  }
+
+  .search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 15px 18px;
+    border: 1px solid var(--border);
+    background: #fafafa;
+    border-radius: 7px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-form input:focus {
+    border-color: var(--primary);
+  }
+
+  .search-form button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 15px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .search-form button:hover {
+    background: var(--primary-hover);
+  }
+
+  .catalog-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 45px 0 25px;
+  }
+
+  .section-label {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .catalog-heading h2 {
+    font-size: 32px;
+    letter-spacing: -1px;
+    margin: 7px 0;
+  }
+
+  .catalog-heading p {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .vehicle-count {
+    background: #e4e4e7;
+    color: #52525b;
+    padding: 9px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .car-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+  }
+
+  .car-card {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .car-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.10);
+  }
+
+  .car-image {
+    position: relative;
+    height: 235px;
+    overflow: hidden;
+    background: #e4e4e7;
+  }
+
+  .car-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .car-card:hover img {
+    transform: scale(1.05);
+  }
+
+  .car-year {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(13, 13, 13, 0.85);
+    color: white;
+    padding: 7px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .no-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .car-info {
+    padding: 22px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .car-brand {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .car-info h3 {
+    font-size: 23px;
+    margin: 6px 0 18px;
+    letter-spacing: -0.5px;
+  }
+
+  .car-price {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0 0 20px;
+  }
+
+  .card-bottom {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .details-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--graphite);
+    color: white;
+    padding: 13px 17px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .details-button:hover {
+    background: var(--primary);
+  }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 60px 20px;
+  }
+
+  .no-results h3 {
+    font-size: 22px;
+    margin: 0 0 10px;
+  }
+
+  .no-results p {
+    color: var(--muted);
+    margin-bottom: 25px;
+  }
+
+  .clear-search {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 1000px) {
     .car-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin: 0 auto;
-      max-width: 1200px;
-      padding: 20px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      padding: 55px 20px 65px;
     }
 
-    .car-card {
-      background-color: #e3e1e1;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      overflow: hidden;
-      text-align: center;
-      transition: all 0.3s ease;
+    .catalog-container {
+      padding: 0 15px;
     }
 
-    .car-card:hover {
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        transform: translateY(-2px);
+    .search-box {
+      padding: 15px;
     }
 
-    .car-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
+    .search-form {
+      flex-direction: column;
     }
 
-    .car-card h3 {
-        font-size: 20px;
-        margin-top: 10px;
-        margin-bottom: 5px;
+    .car-grid {
+      grid-template-columns: 1fr;
     }
 
-    .car-card h2 {
-      font-size: 1.5rem;
-      margin: 10px;
+    .catalog-heading h2 {
+      font-size: 26px;
     }
 
-    .car-card p {
-      font-size: 1rem;
-      margin-bottom: 10px;
+    .car-image {
+      height: 240px;
     }
+  }
+</style>
 
-    @media (max-width: 768px) {
-      .car-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+{% endblock %}
 
-    form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-        text-align: center;
-        padding: 20px;
-    }
+{% block content %}
 
-    input[type="text"] {
-        padding: 10px;
-        font-size: 16px;
-        border: 2px solid #e3e1e1;
-        border-radius: 4px;
-        margin-right: 10px;
-        transition: border-bottom-color 0.3s ease-in-out;
-    }
+<section class="hero">
 
-    input[type="text"]:focus {
-        outline: none;
-        border-bottom-color: #e3e1e1;
-    }
+  <div class="hero-content">
 
-    button[type="submit"] {
-        background-color: #0096c7;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease-in-out;
-    }
+    <span class="hero-label">
+      AutoMotors Multimarcas
+    </span>
 
-    button[type="submit"]:hover {
-        background-color: #108eb8;
-    }
+    <h1>
+      Sua próxima conquista
+      <span>começa aqui.</span>
+    </h1>
 
-    a {
-      font-size: 18px;
-      color: #333;
-      text-decoration: none;
-    }
+    <p>
+      Explore nosso catálogo de veículos e encontre
+      o carro ideal para o seu estilo de vida.
+    </p>
 
-    a:hover {
-      color: #0096c7;
-    }
-  </style>
+    <a href="#catalogo" class="hero-button">
+      Explorar veículos &rarr;
+    </a>
 
-  <form method="GET" action="{% url 'cars_list' %}">
-    <input type="text" name="search" placeholder="Buscar carro...">
-    <button type="submit">Buscar</button>
-  </form>
+  </div>
+
+</section>
+
+<div class="catalog-container" id="catalogo">
+
+  <div class="search-box">
+
+    <form method="GET"
+          action="{% url 'cars_list' %}"
+          class="search-form">
+
+      <input
+        type="text"
+        name="search"
+        placeholder="Buscar por modelo do veículo..."
+        value="{{ request.GET.search|default:'' }}"
+        aria-label="Buscar veículo"
+      >
+
+      <button type="submit">
+        Buscar veículo
+      </button>
+
+    </form>
+
+  </div>
+
+  <div class="catalog-heading">
+
+    <div>
+
+      <span class="section-label">
+        Nosso estoque
+      </span>
+
+      <h2>Veículos disponíveis</h2>
+
+      <p>Encontre o veículo que combina com você.</p>
+
+    </div>
+
+    <span class="vehicle-count">
+      {{ cars|length }} veículo{{ cars|length|pluralize }}
+    </span>
+
+  </div>
 
   <div class="car-grid">
+
     {% if cars %}
+
       {% for car in cars %}
-        <a href="{% url 'car_detail' car.pk %}">
-          <div class="car-card">
+
+        <article class="car-card">
+
+          <a href="{% url 'car_detail' car.pk %}"
+             class="car-image">
+
             {% if car.photo %}
-            <img src="{{ car.photo.url }}" alt="{{ car.model }} - {{ car.brand }}">
-            {%else%}
-              <p class="no-photo"> Foto não disponível </p>
+
+              <img
+                src="{{ car.photo.url }}"
+                alt="{{ car.brand }} {{ car.model }}"
+                loading="lazy"
+              >
+
+            {% else %}
+
+              <div class="no-photo">
+                Foto não disponível
+              </div>
+
             {% endif %}
-            <h2>{{ car.brand }} {{ car.model }}</h2>
-            <p>{{ car.factory_year }} - R$ {{ car.value }}</p>
+
+            <span class="car-year">
+              {{ car.factory_year }}
+            </span>
+
+          </a>
+
+          <div class="car-info">
+
+            <span class="car-brand">
+              {{ car.brand }}
+            </span>
+
+            <h3>{{ car.model }}</h3>
+
+            <p class="car-price">
+              R$ {{ car.value|floatformat:"2g" }}
+            </p>
+
+            <div class="card-bottom">
+
+              <a href="{% url 'car_detail' car.pk %}"
+                 class="details-button">
+
+                Ver detalhes
+                <span>&rarr;</span>
+
+              </a>
+
+            </div>
+
           </div>
-        </a>
+
+        </article>
+
       {% endfor %}
+
     {% else %}
-      <p class="no-results">Nenhum carro encontrado.</p>
+
+      <div class="no-results">
+
+        <h3>Nenhum veículo encontrado</h3>
+
+        <p>
+          Tente pesquisar por outro modelo de veículo.
+        </p>
+
+        <a href="{% url 'cars_list' %}"
+           class="clear-search">
+          Ver todos os veículos
+        </a>
+
+      </div>
+
     {% endif %}
+
   </div>
+
+</div>
+
 {% endblock %}

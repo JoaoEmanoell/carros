@@ -1,31 +1,390 @@
+
 {% extends 'base.html' %}
 
+{% block title %}Criar conta | AutoMotors{% endblock %}
+
+{% block extra_css %}
+<style>
+  .register-container {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 25px;
+  }
+
+  .register-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+  }
+
+  .register-banner {
+    background:
+      radial-gradient(ellipse at bottom right, #701c1c, transparent 70%),
+      linear-gradient(135deg, #09090b, #18181b);
+    color: white;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .banner-label {
+    color: #f87171;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .register-banner h2 {
+    font-size: 42px;
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+    margin: 20px 0;
+  }
+
+  .register-banner h2 span {
+    color: #ef4444;
+  }
+
+  .register-banner p {
+    color: #a1a1aa;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .benefits {
+    list-style: none;
+    padding: 0;
+    margin: 25px 0 0;
+  }
+
+  .benefits li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    color: #e4e4e7;
+    font-size: 14px;
+  }
+
+  .benefit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    background: rgba(220, 38, 38, 0.18);
+    color: #f87171;
+    border-radius: 50%;
+  }
+
+  .register-form-container {
+    padding: 45px 40px;
+  }
+
+  .register-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    background: #fee2e2;
+    color: var(--primary);
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .register-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .register-form-container h1 {
+    font-size: 30px;
+    letter-spacing: -1px;
+    margin: 0 0 10px;
+  }
+
+  .register-subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 28px;
+  }
+
+  .form-group {
+    margin-bottom: 22px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 9px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 14px 15px;
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .form-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+  }
+
+  .field-help {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+    margin-top: 10px;
+  }
+
+  .field-help ul {
+    padding-left: 18px;
+    margin: 5px 0;
+  }
+
+  .register-button {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .register-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .register-divider {
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  .register-footer {
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .register-footer a {
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .register-footer a:hover {
+    text-decoration: underline;
+  }
+
+  .errorlist {
+    list-style: none;
+    padding: 12px;
+    margin: 10px 0;
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .back-catalog {
+    display: inline-block;
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+
+  .back-catalog:hover {
+    color: var(--primary);
+  }
+
+  @media (max-width: 768px) {
+    .register-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .register-banner {
+      padding: 35px;
+    }
+
+    .register-banner h2 {
+      font-size: 30px;
+    }
+
+    .register-form-container {
+      padding: 35px 25px;
+    }
+
+    .register-container {
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-  
-    <form method="post">
+
+<div class="register-container">
+
+  <a href="{% url 'cars_list' %}" class="back-catalog">
+    &larr; Voltar para o catálogo
+  </a>
+
+  <div class="register-layout">
+
+    <section class="register-banner">
+
+      <span class="banner-label">
+        AutoMotors Multimarcas
+      </span>
+
+      <h2>
+        Sua jornada
+        <span>começa aqui.</span>
+      </h2>
+
+      <p>
+        Crie sua conta e faça parte da nossa
+        plataforma de veículos.
+      </p>
+
+      <ul class="benefits">
+
+        <li>
+          <span class="benefit-icon">&#10003;</span>
+          Explore nosso catálogo de veículos
+        </li>
+
+        <li>
+          <span class="benefit-icon">&#10003;</span>
+          Tenha acesso à sua conta pessoal
+        </li>
+
+        <li>
+          <span class="benefit-icon">&#10003;</span>
+          Navegue de forma simples e prática
+        </li>
+
+      </ul>
+
+    </section>
+
+    <section class="register-form-container">
+
+      <div class="register-icon">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M2 21v-2a7 7 0 0 1 14 0v2"/>
+          <path d="M19 8v6M16 11h6"/>
+        </svg>
+
+      </div>
+
+      <h1>Crie sua conta</h1>
+
+      <p class="register-subtitle">
+        Preencha os dados abaixo para começar.
+      </p>
+
+      <form method="post">
+
         {% csrf_token %}
 
+        {{ user_form.non_field_errors }}
+
         <div class="form-group">
-            {{user_form.username.errors}}
-            <label>Usuário</label> 
-            {{user_form.username}}
+
+          <label for="{{ user_form.username.id_for_label }}">
+            Usuário
+          </label>
+
+          {{ user_form.username }}
+
+          {{ user_form.username.errors }}
+
         </div>
 
         <div class="form-group">
-            {{user_form.password1.errors}}
-            <label>Senha</label> 
-            {{user_form.password1}}
+
+          <label for="{{ user_form.password1.id_for_label }}">
+            Senha
+          </label>
+
+          {{ user_form.password1 }}
+
+          {{ user_form.password1.errors }}
+
+          {% if user_form.password1.help_text %}
+
+            <div class="field-help">
+              {{ user_form.password1.help_text }}
+            </div>
+
+          {% endif %}
+
         </div>
 
         <div class="form-group">
-            {{user_form.password2.errors}}
-            <label>Confirmar Senha</label> 
-            {{user_form.password2}}
+
+          <label for="{{ user_form.password2.id_for_label }}">
+            Confirmar senha
+          </label>
+
+          {{ user_form.password2 }}
+
+          {{ user_form.password2.errors }}
+
         </div>
 
-        <div class="form-group">
-            <input type="submit" value="Cadastrar">
-        </div>   
-    </form>
+        <button type="submit" class="register-button">
+          Criar minha conta &rarr;
+        </button>
+
+      </form>
+
+      <div class="register-divider"></div>
+
+      <div class="register-footer">
+
+        Já possui uma conta?
+
+        <a href="{% url 'login' %}">
+          Faça login
+        </a>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
 
 {% endblock %}

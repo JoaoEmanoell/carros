@@ -1,104 +1,620 @@
 
 {% extends "base.html" %}
 
-{% block content %}
-  <style>
-    .car-card {
-      background-color: #e3e1e1;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      overflow: hidden;
-      text-align: center;
-      transition: all 0.3s ease;
-      max-width: 500px;
-      margin: 20px auto 0;
-      margin-bottom: 20px;
+{% block title %}
+  {{ object.brand }} {{ object.model }} | AutoMotors
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .detail-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 35px 30px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 30px;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--primary);
+  }
+
+  .breadcrumb-current {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .vehicle-detail {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 35px;
+    align-items: start;
+  }
+
+  .vehicle-gallery {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .vehicle-image {
+    position: relative;
+    background: #e4e4e7;
+    overflow: hidden;
+  }
+
+  .vehicle-image img {
+    display: block;
+    width: 100%;
+    height: 450px;
+    object-fit: contain;
+    background: #18181b;
+    transition: transform 0.4s ease;
+  }
+
+  .vehicle-image:hover img {
+    transform: scale(1.03);
+  }
+
+  .image-year {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(13, 13, 13, 0.85);
+    color: white;
+    padding: 9px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .no-photo {
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+
+  .gallery-caption {
+    padding: 20px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .vehicle-information {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px;
+  }
+
+  .vehicle-brand {
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .vehicle-information h1 {
+    font-size: clamp(30px, 4vw, 42px);
+    line-height: 1.2;
+    letter-spacing: -1.5px;
+    margin: 10px 0;
+    overflow-wrap: anywhere;
+  }
+
+  .vehicle-subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 25px;
+  }
+
+  .price-container {
+    background: #f4f4f5;
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+
+  .price-label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+
+  .vehicle-price {
+    color: var(--primary);
+    font-size: clamp(25px, 3vw, 36px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    overflow-wrap: anywhere;
+  }
+
+  .specifications-title {
+    font-size: 19px;
+    margin: 0 0 20px;
+  }
+
+  .specifications-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+
+  .specification {
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .specification-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: #fee2e2;
+    color: var(--primary);
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .specification-icon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .specification-label {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  .specification-value {
+    display: block;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .description-section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px;
+    margin-top: 30px;
+  }
+
+  .section-label {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .description-section h2 {
+    font-size: 25px;
+    letter-spacing: -0.5px;
+    margin: 8px 0 18px;
+  }
+
+  .description-section p {
+    color: #52525b;
+    font-size: 16px;
+    line-height: 1.9;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .management-section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 25px 30px;
+    margin-top: 25px;
+  }
+
+  .management-section h2 {
+    font-size: 20px;
+    margin: 0 0 8px;
+  }
+
+  .management-section p {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+
+  .management-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .detail-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 22px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .detail-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .edit-button {
+    background: var(--graphite);
+    color: white;
+  }
+
+  .edit-button:hover {
+    background: #3f3f46;
+    transform: translateY(-2px);
+  }
+
+  .delete-button {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--primary);
+  }
+
+  .delete-button:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 30px;
+  }
+
+  .back-button:hover {
+    color: var(--primary);
+  }
+
+  @media (max-width: 900px) {
+    .vehicle-detail {
+      grid-template-columns: 1fr;
+      gap: 20px;
     }
 
-    .car-card:hover {
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      transform: translateY(-2px);
+    .vehicle-image img {
+      height: 380px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .detail-container {
+      padding: 20px 15px;
     }
 
-    .car-card img {
+    .vehicle-image img {
+      height: 260px;
+    }
+
+    .vehicle-information,
+    .description-section,
+    .management-section {
+      padding: 20px;
+    }
+
+    .specifications-grid {
+      gap: 10px;
+    }
+
+    .specification {
+      padding: 12px;
+    }
+
+    .management-buttons {
+      flex-direction: column;
+    }
+
+    .detail-button {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
     }
+  }
+</style>
+{% endblock %}
 
-    .car-card h2 {
-      font-size: 1.5rem;
-      margin: 10px;
-    }
+{% block content %}
 
-    .car-card p {
-      font-size: 1rem;
-      margin-bottom: 10px;
-    }
+<div class="detail-container">
 
-    .buttons-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
+  <div class="breadcrumb">
 
-    .btn {
-      display: inline-block;
-      background-color: #0096c7;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
-      margin: 0 10px;
-    }
+    <a href="{% url 'cars_list' %}">
+      Início
+    </a>
 
-    .btn:hover {
-      background-color: #108eb8;
-    }
+    <span>/</span>
 
-    .btn-danger {
-      background-color: #d9534f;
-      text-decoration: none !important;
-    }
+    <a href="{% url 'cars_list' %}">
+      Veículos
+    </a>
 
-    .btn-danger:hover {
-      background-color: #d2221c;
-    }
+    <span>/</span>
 
-    .error-message {
-      color: #d9534f;
-      font-size: 14px;
-      margin-top: 5px;
-    }
+    <span class="breadcrumb-current">
+      {{ object.brand }} {{ object.model }}
+    </span>
 
-    a {
-      text-decoration: none !important;
-    }
-  </style>
-  <div class="car-card">
-     {% if object.photo %}
-            <img src="{{ object.photo.url }}" alt="{{ object.model }} - {{ object.brand }}">
-            {%else%}
-              <p class="no-photo"> Foto não disponível </p>
-            {% endif %}
-      <h2>{{ object.brand }} {{ object.model }}</h2>
-      <p><strong>Ano de fabricação:</strong> {{ object.factory_year }}</p>
-      <p><strong>Ano do modelo:</strong> {{ object.model_year }}</p>
-      <p><strong>Placa:</strong> {{ object.plate }}</p>
-      <p><strong>Preço:</strong> R$ {{ object.value }}</p>
-      {% if object.bio %}
-        <p><strong>Bio:</strong> {{ object.bio }}</p>
-      {% endif %}
   </div>
-  {% if user.is_authenticated %}
-    <div class="buttons-container">
-      <a href="{% url 'car_update' pk=object.pk %}" class="btn btn-primary">Editar</a>
-      <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-danger">Deletar</a>
+
+  <div class="vehicle-detail">
+
+    <!-- Imagem do veículo -->
+
+    <div class="vehicle-gallery">
+
+      <div class="vehicle-image">
+
+        {% if object.photo %}
+
+          <img
+            src="{{ object.photo.url }}"
+            alt="{{ object.brand }} {{ object.model }}"
+          >
+
+        {% else %}
+
+          <div class="no-photo">
+            Foto não disponível
+          </div>
+
+        {% endif %}
+
+        <span class="image-year">
+          {{ object.model_year }}
+        </span>
+
+      </div>
+
+      <div class="gallery-caption">
+        {{ object.brand }} {{ object.model }} |
+        AutoMotors Multimarcas
+      </div>
+
     </div>
+
+    <!-- Informações do veículo -->
+
+    <div class="vehicle-information">
+
+      <span class="vehicle-brand">
+        {{ object.brand }}
+      </span>
+
+      <h1>{{ object.model }}</h1>
+
+      <p class="vehicle-subtitle">
+        {{ object.factory_year }}/{{ object.model_year }}
+      </p>
+
+      <div class="price-container">
+
+        <span class="price-label">
+          Valor do veículo
+        </span>
+
+        <div class="vehicle-price">
+          R$ {{ object.value|floatformat:"2g" }}
+        </div>
+
+      </div>
+
+      <h2 class="specifications-title">
+        Ficha técnica
+      </h2>
+
+      <div class="specifications-grid">
+
+        <!-- Ano de fabricação -->
+
+        <div class="specification">
+
+          <div class="specification-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="16" rx="2"/>
+              <path d="M16 3v4M8 3v4M3 10h18"/>
+            </svg>
+          </div>
+
+          <span class="specification-label">
+            Ano de fabricação
+          </span>
+
+          <span class="specification-value">
+            {{ object.factory_year }}
+          </span>
+
+        </div>
+
+        <!-- Ano do modelo -->
+
+        <div class="specification">
+
+          <div class="specification-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="16" rx="2"/>
+              <path d="M16 3v4M8 3v4M3 10h18"/>
+              <path d="m9 15 2 2 4-4"/>
+            </svg>
+          </div>
+
+          <span class="specification-label">
+            Ano do modelo
+          </span>
+
+          <span class="specification-value">
+            {{ object.model_year }}
+          </span>
+
+        </div>
+
+        <!-- Marca -->
+
+        <div class="specification">
+
+          <div class="specification-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="m5 17-1 2M19 17l1 2"/>
+              <path d="M5 11l2-6h10l2 6"/>
+              <rect x="3" y="11" width="18" height="6" rx="2"/>
+              <path d="M7 14h.01M17 14h.01"/>
+            </svg>
+          </div>
+
+          <span class="specification-label">
+            Marca
+          </span>
+
+          <span class="specification-value">
+            {{ object.brand }}
+          </span>
+
+        </div>
+
+        <!-- Placa -->
+
+        <div class="specification">
+
+          <div class="specification-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <rect x="2" y="6" width="20" height="12" rx="2"/>
+              <path d="M6 10h12M6 14h8"/>
+            </svg>
+          </div>
+
+          <span class="specification-label">
+            Placa
+          </span>
+
+          <span class="specification-value">
+            {{ object.plate|default:"Não informada" }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Descrição do veículo -->
+
+  {% if object.bio %}
+
+    <section class="description-section">
+
+      <span class="section-label">
+        Conheça o veículo
+      </span>
+
+      <h2>Sobre este veículo</h2>
+
+      <p>{{ object.bio }}</p>
+
+    </section>
+
   {% endif %}
+
+  <!-- Gerenciamento do veículo -->
+
+  {% if user.is_authenticated %}
+
+    <section class="management-section">
+
+      <h2>Gerenciamento do veículo</h2>
+
+      <p>
+        Atualize as informações ou remova este veículo do catálogo.
+      </p>
+
+      <div class="management-buttons">
+
+        <a href="{% url 'car_update' pk=object.pk %}"
+           class="detail-button edit-button">
+
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round">
+            <path d="m16 3 5 5-12 12-6 1 1-6Z"/>
+            <path d="m13 6 5 5"/>
+          </svg>
+
+          Editar veículo
+
+        </a>
+
+        <a href="{% url 'car_delete' pk=object.pk %}"
+           class="detail-button delete-button">
+
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round">
+            <path d="M3 6h18M9 6V3h6v3"/>
+            <path d="m5 6 1 15h12l1-15"/>
+            <path d="M10 10v7M14 10v7"/>
+          </svg>
+
+          Excluir veículo
+
+        </a>
+
+      </div>
+
+    </section>
+
+  {% endif %}
+
+  <a href="{% url 'cars_list' %}" class="back-button">
+    &larr; Voltar para o catálogo
+  </a>
+
+</div>
+
 {% endblock %}
