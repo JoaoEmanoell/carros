@@ -1,24 +1,42 @@
 
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}AutoMotors | Encontre seu próximo veículo{% endblock %}
 
 {% block extra_css %}
 
 <style>
-  .hero {
+.hero {
     background:
-      radial-gradient(ellipse at 90% 50%, #5c1717 0%, transparent 55%),
-      linear-gradient(120deg, #09090b, #18181b);
-    color: white;
-    padding: 85px 30px;
-    overflow: hidden;
-  }
+        linear-gradient(
+            90deg,
+            rgba(9, 9, 11, 0.98) 0%,
+            rgba(9, 9, 11, 0.85) 35%,
+            rgba(9, 9, 11, 0.30) 70%,
+            rgba(9, 9, 11, 0.10) 100%
+        ),
+        url("{% static 'cars/images/hero-banner.jpg' %}");
 
-  .hero-content {
+    background-color: #09090b;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    min-height: 480px;
+    padding: 85px 30px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.hero-content {
+    width: 100%;
     max-width: 1220px;
     margin: 0 auto;
-  }
+}
 
   .hero-label {
     display: inline-block;
